@@ -1,0 +1,7 @@
+#It ignores the Eclipse IDE files
+.classpath
+.project
+.settings
+
+#It ignores the bin directory.
+bin

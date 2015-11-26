@@ -10,16 +10,9 @@ import java.util.Map;
 public class MLDataType {
 
 	public static final MLDataType miINT8 = new MLDataType(1, 1);
+	public static final MLDataType miINT32 = new MLDataType(5, 4);
 	public static final MLDataType miUINT32 = new MLDataType(6, 4);
-	public static final MLDataType miMATRIX = new MLDataType(14, 0);
-	
-	/*public static final Map<Integer, Integer> DataTypeBytes = new HashMap<Integer, Integer>();
-	static {
-		DataTypeBytes.put(miINT8.value, miINT8.bytes);
-		DataTypeBytes.put(miUINT32.value, miUINT32.bytes);
-		DataTypeBytes.put(miMATRIX.value, miMATRIX.bytes); //Matrix length is variable.
-	}*/
-	
+	public static final MLDataType miMATRIX = new MLDataType(14, 0); 
 	
 	private static final Map<Integer, MLDataType> dataTypes = new HashMap<Integer, MLDataType>(); 
 	public static MLDataType dataTypeFromValue(int index) { return dataTypes.get(index); }

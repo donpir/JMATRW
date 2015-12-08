@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import it.jmatfileio.DataElement;
+import it.jmatfileio.matdatatypes.MLDataType;
+import it.jmatfileio.matdatatypes.UnknownMLDataTypeException;
 import it.jmatfileio.utils.ByteArray;
 import it.jmatfileio.utils.ByteArray.ByteArrayOrder;
 
@@ -38,8 +40,13 @@ public class JMatReader {
 	
 	public DataElement readDataElementHeader() throws IOException {
 		DataElement dataElement = new DataElement();
-		dataElement.dataType = (int) readBytes(4).getUInt32();
+		int iDataType = (int) readBytes(4).getUInt32();
+		dataElement.dataType = MLDataType.dataTypeFromValue(iDataType); 
 		dataElement.numOfBytesBody = (int) readBytes(4).getUInt32();
+		
+		if (dataElement.dataType == null)
+			throw new UnknownMLDataTypeException("Unknown Data Type with index " + iDataType);
+		
 		return dataElement;
 	}//EndMethod.
 	

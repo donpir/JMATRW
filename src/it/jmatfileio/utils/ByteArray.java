@@ -26,7 +26,7 @@ public class ByteArray {
 		for (int i=0; i<_buffer.length; i++) {
 			long lUlong = ((long) _buffer[i]); //Convert the byte in a long to have enough space for shifts.
 			
-			int shift = _endianEncoding == ByteArrayOrder.BIG_ENDIAN ? (_buffer.length - i - 1) * 8 : i * 8;  
+			long shift = _endianEncoding == ByteArrayOrder.BIG_ENDIAN ? (_buffer.length - i - 1) * 8 : i * 8;  
 			value = value | lUlong << shift; //Precedence: first SHIFT (<<) then OR (|)
 		}
 		return value;

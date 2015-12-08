@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+import it.jmatfileio.DataElement;
 import it.jmatfileio.JMATData;
 import it.jmatfileio.matdatatypes.MLArrayTypeClass;
 import it.jmatfileio.matdatatypes.MLDataType;
 import it.jmatfileio.utils.ByteArray.ByteArrayOrder;
+import junit.framework.Assert;
 
 /**
  * 
@@ -33,8 +35,11 @@ public class JMatControl {
 		int iNumOfBytes = (int) _reader.readBytes(4).getUInt32();
 		
 		if (dataType == MLDataType.miMATRIX.value) {
-			//Array Flags format.
-			_reader.readDataElementHeader();
+			//Read the ArrayFlag Subelement.
+			DataElement _arrFlag = _reader.readDataElementHeader();
+			assert (_arrFlag.dataType == MLDataType.miUINT32);
+			assert (_arrFlag.numOfBytesBody == 8); //size is 8 bytes = [miUINT32 * 2]
+			
 			byte[] bArrFlag = _reader.readBytes(MLDataType.miUINT32.bytes).arrayEndian();
 			_reader.readBytes(MLDataType.miUINT32.bytes); //Undefined 4 bytes in the flag data.
 			byte lflag = bArrFlag[2];
@@ -42,36 +47,22 @@ public class JMatControl {
 			MLArrayTypeClass arrayTypeClass = MLArrayTypeClass.dataTypeFromValue(lclass);
 			
 			//Dimensions Array Subelement.
-			_reader.readBytes(MLDataType.miINT32.bytes).getInt32();
+			DataElement _dimArray = _reader.readDataElementHeader();
+			assert (_dimArray.dataType == MLDataType.miINT32);
+			int numOfArrayDims = _dimArray.numOfBytesBody / 4;
+			assert (numOfArrayDims >= 2);//A Matlab array has at least two dimensions.
+			
+			//TODO: it works only for array of 2 dimensions.
+			_reader.readBytes(4).getUInt32();
+			_reader.readBytes(4).getUInt32();
 			
 			//Array name.
-			byte[] arrName =_reader.readBytes(MLDataType.miINT8.bytes).arrayEndian();
-			String sArrayName = new String(arrName);
+			DataElement _arrName = _reader.readDataElementHeader();
+			assert (_dimArray.dataType == MLDataType.miINT8);
+			byte[] _bArrName = _reader.readBytes(_arrName.numOfBytesBody).arrayEndian();
+			String s = new String(_bArrName);
+			System.out.println("Name " + s);
 			
-			System.out.println("Class" + lclass);
-			
-			//long lFlag = _reader.readBytes(MLDataType.miUINT32.bytes).array();
-			//long lClass = _reader.readBytes(MLDataType.miUINT32.bytes).getLong();
-			
-			/*ByteBuffer bArrFlag = _reader.readBytes(MLDataType.miUINT32.bytes).flip().array();
-			byte bflags = bArrFlag.get;
-			int iClass = bArrFlag.get(3);*/
-			
-			/*byte[] bArrFlag = new byte[8]; 
-			_reader.getInputStream().read(bArrFlag);
-			
-			byte[] bArrFlags = _reader.readBytes(MLDataType.miUINT32.bytes * 2).array();
-			byte bflags = bArrFlags[2];
-			int iClass = bArrFlags[3];*/
-			
-			//System.out.printf("iClass " + lClass);
-			
-			/*int iNumBytesRed = 0;
-			while (iNumBytesRed < iNumOfBytes) {
-				iNumBytesRed += readElementData();
-			}//EndWhile.
-			
-			return iNumBytesRed;*/
 		} else if (dataType == MLDataType.miUINT32.value) {
 			/*int iNumBytesToRead = MLDataType.dataTypeFromValue(dataType).bytes;
 			ByteBuffer buffer = _reader.readBytes(iNumBytesToRead);

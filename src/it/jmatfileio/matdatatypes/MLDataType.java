@@ -19,6 +19,7 @@ public class MLDataType {
 	
 	static {
 		dataTypes.put(miINT8.value, miINT8);
+		dataTypes.put(miINT32.value, miINT32);
 		dataTypes.put(miUINT32.value, miUINT32);
 		dataTypes.put(miMATRIX.value, miMATRIX);
 	}

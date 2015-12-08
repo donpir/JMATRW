@@ -1,8 +1,14 @@
 package it.jmatfileio;
 
+import it.jmatfileio.matdatatypes.MLDataType;
+
+/**
+ * 
+ * @author Donato Pirozzi - donatopirozzi@gmail.com
+ */
 public class DataElement {
 	
-	public int dataType;
+	public MLDataType dataType;
 	public int numOfBytesBody;
 
-}
+}//EndClass.

@@ -47,7 +47,7 @@ public class JMatControl {
 			MLArrayTypeClass arrayTypeClass = MLArrayTypeClass.dataTypeFromValue(lclass);
 			
 			//Dimensions Array Subelement.
-			DataElement _dimArray = _reader.readDataElementHeader();
+            DataElement _dimArray = _reader.readDataElementHeader();
 			assert (_dimArray.dataType == MLDataType.miINT32);
 			int numOfArrayDims = _dimArray.numOfBytesBody / 4;
 			assert (numOfArrayDims >= 2);//A Matlab array has at least two dimensions.

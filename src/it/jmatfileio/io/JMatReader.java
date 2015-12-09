@@ -26,7 +26,7 @@ public class JMatReader {
 
 	public ByteArray readBytes(int numOfBytes) throws IOException {
 		if (numOfBytes <= 0) throw new IllegalArgumentException("Number of bytes to read can not be negative or zero.");
-		if (numOfBytes % 4 != 0) throw new IllegalArgumentException("Number of bytes must be multiple of 4.");
+		//if (numOfBytes % 4 != 0) throw new IllegalArgumentException("Number of bytes must be multiple of 4.");
 		
 		byte[] bytes = new byte[numOfBytes]; 
 		int iNumOfRedBytes = _is.read(bytes); 
@@ -40,9 +40,24 @@ public class JMatReader {
 	
 	public DataElement readDataElementHeader() throws IOException {
 		DataElement dataElement = new DataElement();
-		int iDataType = (int) readBytes(4).getUInt32();
-		dataElement.dataType = MLDataType.dataTypeFromValue(iDataType); 
-		dataElement.numOfBytesBody = (int) readBytes(4).getUInt32();
+		long iDataType = readBytes(4).getUInt32();
+		
+		/* Mat file has a standard Data Element and a Small Data Element.
+		   Here, these lines are to check if the element is small. From the MATLAB doc:
+		   "you can tell if you are processing a small data element by
+		   comparing the value of the first 2 bytes of the tag with the value zero (0). If these 2 bytes
+		   are not zero, the tag uses the small data element format". */
+		boolean bSmallDataElement = (iDataType & 0xff0000) != 0;
+		
+  		if (bSmallDataElement == true) { //Process Small Element Data.
+			//Take bytes 3 and 4 which contain the data type.
+			dataElement.dataType = MLDataType.dataTypeFromValue((int) iDataType & 0xffff);
+			//Take bytes 1 and 2, that contain the number of bytes to read.
+			dataElement.numOfBytesBody = (int) iDataType >> 16; 
+		} else { //Standard Element data.
+			dataElement.dataType = MLDataType.dataTypeFromValue((int) iDataType); 
+			dataElement.numOfBytesBody = (int) readBytes(4).getUInt32();	
+		}
 		
 		if (dataElement.dataType == null)
 			throw new UnknownMLDataTypeException("Unknown Data Type with index " + iDataType);

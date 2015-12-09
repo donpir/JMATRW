@@ -26,7 +26,7 @@ public class JMatReader {
 
 	public ByteArray readBytes(int numOfBytes) throws IOException {
 		if (numOfBytes <= 0) throw new IllegalArgumentException("Number of bytes to read can not be negative or zero.");
-		//if (numOfBytes % 4 != 0) throw new IllegalArgumentException("Number of bytes must be multiple of 4.");
+		if (numOfBytes % 4 != 0) throw new IllegalArgumentException("Number of bytes must be multiple of 4.");
 		
 		byte[] bytes = new byte[numOfBytes]; 
 		int iNumOfRedBytes = _is.read(bytes); 
@@ -54,6 +54,7 @@ public class JMatReader {
 			dataElement.dataType = MLDataType.dataTypeFromValue((int) iDataType & 0xffff);
 			//Take bytes 1 and 2, that contain the number of bytes to read.
 			dataElement.numOfBytesBody = (int) iDataType >> 16; 
+			if (dataElement.numOfBytesBody < 4) dataElement.numOfBytesBody = 4;
 		} else { //Standard Element data.
 			dataElement.dataType = MLDataType.dataTypeFromValue((int) iDataType); 
 			dataElement.numOfBytesBody = (int) readBytes(4).getUInt32();	

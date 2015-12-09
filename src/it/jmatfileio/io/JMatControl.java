@@ -61,7 +61,12 @@ public class JMatControl {
 			assert (_dimArray.dataType == MLDataType.miINT8);
 			byte[] _bArrName = _reader.readBytes(_arrName.numOfBytesBody).arrayEndian();
 			String s = new String(_bArrName);
-			System.out.println("Name " + s);
+			
+			//Read the numbers.
+			DataElement _arrCells = _reader.readDataElementHeader();
+			
+			//TODO: read here the doubles.
+			System.out.println();
 			
 		} else if (dataType == MLDataType.miUINT32.value) {
 			/*int iNumBytesToRead = MLDataType.dataTypeFromValue(dataType).bytes;

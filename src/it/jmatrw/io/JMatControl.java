@@ -60,8 +60,13 @@ public class JMatControl {
 			//Array name.
 			DataElement _arrName = _reader.readDataElementHeader();
 			assert (_dimArray.dataType == MLDataType.miINT8);
+			
+			if (_arrName.numOfBytesBody % 8 != 0)
+				_arrName.numOfBytesBody = (_arrName.numOfBytesBody / 8 + 1) * 8;
+						
 			byte[] _bArrName = _reader.readBytes(_arrName.numOfBytesBody).arrayEndian();
 			String s = new String(_bArrName);
+			System.out.println(s);
 			
 			//Read the numbers.
 			DataElement _arrCells = _reader.readDataElementHeader();

@@ -37,7 +37,11 @@ public class JMatReader {
 	private InputStream _is = null;
 	private ByteArrayOrder endianEncoding = ByteArrayOrder.BIG_ENDIAN; 
 	
-	public JMatReader(InputStream is) { this._is = is; }//EndConstructor.
+	public JMatReader(InputStream is) { 
+		this._is = is;
+		if (is == null)
+			throw new IllegalArgumentException("The InputStream given to the Reader is null.");
+	}//EndConstructor.
 
 	public ByteArrayOrder getEndianEncoding() { return endianEncoding; }
 	public void setEndianEncoding(ByteArrayOrder endianEncoding) { this.endianEncoding = endianEncoding; }

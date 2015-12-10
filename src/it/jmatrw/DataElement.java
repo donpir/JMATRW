@@ -26,6 +26,9 @@ import it.jmatrw.matdatatypes.MLDataType;
  */
 public class DataElement {
 	
+	public enum DEType { SMALL, STANDARD }
+	
+	public DEType dataElementType = DEType.STANDARD;
 	public MLDataType dataType;
 	public int numOfBytesBody;
 

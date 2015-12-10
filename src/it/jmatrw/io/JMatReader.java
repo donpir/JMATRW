@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import it.jmatrw.DataElement;
+import it.jmatrw.DataElement.DEType;
 import it.jmatrw.matdatatypes.MLDataType;
 import it.jmatrw.matdatatypes.UnknownMLDataTypeException;
 import it.jmatrwio.utils.ByteArray;
@@ -77,6 +78,8 @@ public class JMatReader {
 			//Take bytes 1 and 2, that contain the number of bytes to read.
 			dataElement.numOfBytesBody = (int) iDataType >> 16; 
 			if (dataElement.numOfBytesBody < 4) dataElement.numOfBytesBody = 4;
+			//Store the Data Element Type.
+			dataElement.dataElementType = DEType.SMALL;
 		} else { //Standard Element data.
 			dataElement.dataType = MLDataType.dataTypeFromValue((int) iDataType); 
 			dataElement.numOfBytesBody = (int) readBytes(4).getUInt32();	

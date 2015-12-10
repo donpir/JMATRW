@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import it.jmatrw.DataElement;
+import it.jmatrw.DataElement.DEType;
 import it.jmatrw.JMATData;
 import it.jmatrw.JMATData.DataType;
 import it.jmatrw.matdatatypes.MLArrayTypeClass;
@@ -79,7 +80,8 @@ public class JMatControl {
 			DataElement _arrName = _reader.readDataElementHeader();
 			assert (_dimArray.dataType == MLDataType.miINT8);
 			
-			if (_arrName.numOfBytesBody % 8 != 0)
+			//TODO: probably it can be moved inside the readDataElementHeader()
+			if (_arrName.dataElementType == DEType.STANDARD && _arrName.numOfBytesBody % 8 != 0)
 				_arrName.numOfBytesBody = (_arrName.numOfBytesBody / 8 + 1) * 8;
 						
 			byte[] _bArrName = _reader.readBytes(_arrName.numOfBytesBody).arrayEndian();

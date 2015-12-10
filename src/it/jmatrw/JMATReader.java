@@ -16,31 +16,29 @@
  *     Donato Pirozzi
  */
 
-package it.jmatrw.io;
+package it.jmatrw;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
-import it.jmatrw.DataElement;
-import it.jmatrw.DataElement.DEType;
-import it.jmatrw.JMATData;
 import it.jmatrw.JMATData.DataType;
+import it.jmatrw.io.DataElement;
+import it.jmatrw.io.JMatInput;
+import it.jmatrw.io.DataElement.DEType;
 import it.jmatrw.matdatatypes.MLArrayTypeClass;
 import it.jmatrw.matdatatypes.MLDataType;
 import it.jmatrwio.utils.ByteArray.ByteArrayOrder;
-import junit.framework.Assert;
 
 /**
  * 
  * @author Donato Pirozzi - donatopirozzi@gmail.com
  */
-public class JMatControl {
+public class JMATReader {
 
-	private JMatReader _reader = null;
+	private JMatInput _reader = null;
 	private JMATData mldata = new JMATData();
 	
-	public JMatControl(InputStream is) { _reader = new JMatReader(is); }//EndConstructor.
+	public JMATReader(InputStream is) { _reader = new JMatInput(is); }//EndConstructor.
 	
 	public JMATData read() throws IOException {
 		readHeader();

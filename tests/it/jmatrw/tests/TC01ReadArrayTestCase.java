@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import it.jmatrw.JMATData;
+import it.jmatrw.JMATReader;
 import it.jmatrw.JMATData.DataType;
-import it.jmatrw.io.JMatControl;
 import junit.framework.TestCase;
 
 /**
@@ -43,7 +43,7 @@ public class TC01ReadArrayTestCase extends TestCase {
 		assertNotNull(fis);
 		
 		//Create the reader.
-		JMatControl controller = new JMatControl(fis);
+		JMATReader controller = new JMATReader(fis);
 		JMATData matdata = controller.read();
 		
 		//Check file version.

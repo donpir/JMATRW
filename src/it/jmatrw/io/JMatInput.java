@@ -20,8 +20,7 @@ package it.jmatrw.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import it.jmatrw.DataElement;
-import it.jmatrw.DataElement.DEType;
+import it.jmatrw.io.DataElement.DEType;
 import it.jmatrw.matdatatypes.MLDataType;
 import it.jmatrw.matdatatypes.UnknownMLDataTypeException;
 import it.jmatrwio.utils.ByteArray;
@@ -33,12 +32,12 @@ import it.jmatrwio.utils.ByteArray.ByteArrayOrder;
  * encoding differences. 
  * @author Donato Pirozzi - donatopirozzi@gmail.com
  */
-public class JMatReader {
+public class JMatInput {
 
 	private InputStream _is = null;
 	private ByteArrayOrder endianEncoding = ByteArrayOrder.BIG_ENDIAN; 
 	
-	public JMatReader(InputStream is) { 
+	public JMatInput(InputStream is) { 
 		this._is = is;
 		if (is == null)
 			throw new IllegalArgumentException("The InputStream given to the Reader is null.");

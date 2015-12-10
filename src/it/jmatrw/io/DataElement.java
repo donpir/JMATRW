@@ -16,7 +16,7 @@
  *     Donato Pirozzi
  */
 
-package it.jmatrw;
+package it.jmatrw.io;
 
 import it.jmatrw.matdatatypes.MLDataType;
 

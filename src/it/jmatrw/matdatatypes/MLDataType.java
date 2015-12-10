@@ -14,7 +14,7 @@ public class MLDataType {
 	public static final MLDataType miINT32 = new MLDataType(5, 4, "miINT32");
 	public static final MLDataType miUINT32 = new MLDataType(6, 4, "miUINT32");
 	
-	public static final MLDataType miDOUBLE = new MLDataType(9, 4, "miDOUBLE");
+	public static final MLDataType miDOUBLE = new MLDataType(9, 8, "miDOUBLE");
 	
 	public static final MLDataType miMATRIX = new MLDataType(14, 0, "miMATRIX"); 
 	

@@ -65,6 +65,13 @@ public class JMatControl {
 			//Read the numbers.
 			DataElement _arrCells = _reader.readDataElementHeader();
 			
+			int iRedBytes = 0;
+			while (iRedBytes < _arrCells.numOfBytesBody) {
+				//Read the next number.
+				double value = _reader.readBytes(_arrCells.dataType.bytes).getDouble();
+				System.out.println(value);
+			}
+			
 			//TODO: read here the doubles.
 			System.out.println();
 			

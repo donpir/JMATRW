@@ -13,6 +13,11 @@ import junit.framework.TestCase;
  */
 public class TC01ReadArrayTestCase extends TestCase {
 
+	/*
+	 * example01_array.mat contains: x = [1, 3, 2]
+	 * @throws IOException
+	 */
+		
 	public void testVersion() throws IOException {
 		//Open the file.
 		InputStream fis = TestCase.class.getResourceAsStream("/basicexamples/example01_array.mat");
@@ -25,8 +30,6 @@ public class TC01ReadArrayTestCase extends TestCase {
 		//Check file version.
 		assertTrue(matdata.header.contains("MATLAB"));
 		assertTrue(matdata.version == 1);
-
-		
 	}//EndTest.
 	
 }//EndTestCase.

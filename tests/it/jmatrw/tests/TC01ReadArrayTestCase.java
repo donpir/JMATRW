@@ -52,7 +52,9 @@ public class TC01ReadArrayTestCase extends TestCase {
 		
 		//Check file content.
 		assertTrue(matdata.dataType == DataType.ARRAY_DOUBLE);
-		double[] arrDouble = (double[]) matdata.value;
+		assertEquals("x", matdata.dataName);
+		
+		double[] arrDouble = (double[]) matdata.dataValue;
 		assertTrue(arrDouble.length == 3);
 		assertTrue(arrDouble[0] == 1.0);
 		assertTrue(arrDouble[1] == 3.0);

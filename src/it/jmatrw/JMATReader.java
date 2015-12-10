@@ -83,8 +83,7 @@ public class JMATReader {
 				_arrName.numOfBytesBody = (_arrName.numOfBytesBody / 8 + 1) * 8;
 						
 			byte[] _bArrName = _reader.readBytes(_arrName.numOfBytesBody).arrayEndian();
-			String s = new String(_bArrName);
-			System.out.println(s);
+			mldata.dataName = new StringBuilder(new String(_bArrName)).reverse().toString().trim();
 			
 			//Read the numbers.
 			DataElement _arrCells = _reader.readDataElementHeader();
@@ -104,7 +103,7 @@ public class JMATReader {
 			}
 			
 			mldata.dataType = DataType.ARRAY_DOUBLE;
-			mldata.value = arrValues;
+			mldata.dataValue = arrValues;
 			
 		} else if (dataType == MLDataType.miUINT32.value) {
 			/*int iNumBytesToRead = MLDataType.dataTypeFromValue(dataType).bytes;

@@ -28,7 +28,9 @@ public class JMATData {
 	
 	public String header;
 	public int version;
+	
+	public String dataName;
 	public DataType dataType;
-	public Object value;
+	public Object dataValue;
 		
 }//EndClass.

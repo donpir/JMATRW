@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 
 import it.jmatrw.DataElement;
 import it.jmatrw.JMATData;
+import it.jmatrw.JMATData.DataType;
 import it.jmatrw.matdatatypes.MLArrayTypeClass;
 import it.jmatrw.matdatatypes.MLDataType;
 import it.jmatrwio.utils.ByteArray.ByteArrayOrder;
@@ -65,15 +66,22 @@ public class JMatControl {
 			//Read the numbers.
 			DataElement _arrCells = _reader.readDataElementHeader();
 			
+			double[] arrValues = null;
+			if (_arrCells.dataType == MLDataType.miDOUBLE) 
+				arrValues = new double[_arrCells.numOfBytesBody / _arrCells.dataType.bytes];
+				
 			int iRedBytes = 0;
+			int index = 0;
 			while (iRedBytes < _arrCells.numOfBytesBody) {
 				//Read the next number.
 				double value = _reader.readBytes(_arrCells.dataType.bytes).getDouble();
-				System.out.println(value);
+				arrValues[index] = value;
+				iRedBytes += _arrCells.dataType.bytes;
+				index++;
 			}
 			
-			//TODO: read here the doubles.
-			System.out.println();
+			mldata.dataType = DataType.ARRAY_DOUBLE;
+			mldata.value = arrValues;
 			
 		} else if (dataType == MLDataType.miUINT32.value) {
 			/*int iNumBytesToRead = MLDataType.dataTypeFromValue(dataType).bytes;
@@ -82,8 +90,7 @@ public class JMatControl {
 			System.out.printf("Value: %d\n", value);
 			return iNumBytesToRead;*/
 		}
-		
-		System.out.println();
+	
 		return 0;
 	}//EndMethod.
 	

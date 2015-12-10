@@ -6,7 +6,11 @@ package it.jmatrw;
  */
 public class JMATData {
 
+	public enum DataType { ARRAY_DOUBLE }
+	
 	public String header;
 	public int version;
-	
+	public DataType dataType;
+	public Object value;
+		
 }//EndClass.

@@ -1,4 +1,4 @@
-package it.jmatfileio.matdatatypes;
+package it.jmatrw.matdatatypes;
 
 public class UnknownMLDataTypeException extends Error {
 	private static final long serialVersionUID = 1L;

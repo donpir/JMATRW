@@ -1,6 +1,6 @@
-package it.jmatfileio;
+package it.jmatrw;
 
-import it.jmatfileio.matdatatypes.MLDataType;
+import it.jmatrw.matdatatypes.MLDataType;
 
 /**
  * 

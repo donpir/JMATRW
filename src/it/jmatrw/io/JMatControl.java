@@ -1,14 +1,14 @@
-package it.jmatfileio.io;
+package it.jmatrw.io;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-import it.jmatfileio.DataElement;
-import it.jmatfileio.JMATData;
-import it.jmatfileio.matdatatypes.MLArrayTypeClass;
-import it.jmatfileio.matdatatypes.MLDataType;
-import it.jmatfileio.utils.ByteArray.ByteArrayOrder;
+import it.jmatrw.DataElement;
+import it.jmatrw.JMATData;
+import it.jmatrw.matdatatypes.MLArrayTypeClass;
+import it.jmatrw.matdatatypes.MLDataType;
+import it.jmatrwio.utils.ByteArray.ByteArrayOrder;
 import junit.framework.Assert;
 
 /**

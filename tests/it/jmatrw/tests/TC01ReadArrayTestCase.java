@@ -1,10 +1,10 @@
-package it.jmatfileio.tests;
+package it.jmatrw.tests;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import it.jmatfileio.JMATData;
-import it.jmatfileio.io.JMatControl;
+import it.jmatrw.JMATData;
+import it.jmatrw.io.JMatControl;
 import junit.framework.TestCase;
 
 /**

@@ -1,12 +1,12 @@
-package it.jmatfileio.io;
+package it.jmatrw.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import it.jmatfileio.DataElement;
-import it.jmatfileio.matdatatypes.MLDataType;
-import it.jmatfileio.matdatatypes.UnknownMLDataTypeException;
-import it.jmatfileio.utils.ByteArray;
-import it.jmatfileio.utils.ByteArray.ByteArrayOrder;
+import it.jmatrw.DataElement;
+import it.jmatrw.matdatatypes.MLDataType;
+import it.jmatrw.matdatatypes.UnknownMLDataTypeException;
+import it.jmatrwio.utils.ByteArray;
+import it.jmatrwio.utils.ByteArray.ByteArrayOrder;
 
 /**
  * This class provides basic input stream reading functions, 

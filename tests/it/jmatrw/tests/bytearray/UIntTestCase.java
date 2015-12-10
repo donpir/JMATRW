@@ -1,7 +1,7 @@
-package it.jmatfileio.tests.bytearray;
+package it.jmatrw.tests.bytearray;
 
-import it.jmatfileio.utils.ByteArray;
-import it.jmatfileio.utils.ByteArray.ByteArrayOrder;
+import it.jmatrwio.utils.ByteArray;
+import it.jmatrwio.utils.ByteArray.ByteArrayOrder;
 import junit.framework.TestCase;
 
 /**

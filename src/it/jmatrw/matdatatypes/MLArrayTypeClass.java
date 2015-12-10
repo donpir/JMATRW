@@ -1,4 +1,4 @@
-package it.jmatfileio.matdatatypes;
+package it.jmatrw.matdatatypes;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -76,6 +76,9 @@ public class JMATReader {
 			int dim1 = (int) _reader.readBytes(4).getUInt32();
 			int dim2 = (int) _reader.readBytes(4).getUInt32();
 			
+			if (dim1 < 0 || dim2 < 0)
+				throw new IllegalArgumentException("The matrix or array is too huge.");
+			
 			//Array name.
 			DataElement _arrName = _reader.readDataElementHeader();
 			assert (_dimArray.dataType == MLDataType.miINT8);

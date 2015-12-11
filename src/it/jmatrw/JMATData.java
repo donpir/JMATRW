@@ -24,7 +24,7 @@ package it.jmatrw;
  */
 public class JMATData {
 
-	public enum DataType { ARRAY_DOUBLE }
+	public enum DataType { ARRAY_DOUBLE, MATRIX_DOUBLE }
 	
 	public String header;
 	public int version;

@@ -69,10 +69,12 @@ public class JMATReader {
 			assert (_dimArray.dataType == MLDataType.miINT32);
 			int numOfArrayDims = _dimArray.numOfBytesBody / 4;
 			assert (numOfArrayDims >= 2);//A Matlab array has at least two dimensions.
+			if (numOfArrayDims != 2)
+				throw new IllegalArgumentException("This version of JMATRW is able to read only one-dimensional and two-dimensional arrays");
 			
 			//TODO: it works only for array of 2 dimensions.
-			_reader.readBytes(4).getUInt32();
-			_reader.readBytes(4).getUInt32();
+			int dim1 = (int) _reader.readBytes(4).getUInt32();
+			int dim2 = (int) _reader.readBytes(4).getUInt32();
 			
 			//Array name.
 			DataElement _arrName = _reader.readDataElementHeader();
@@ -88,23 +90,43 @@ public class JMATReader {
 			//Read the numbers.
 			DataElement _arrCells = _reader.readDataElementHeader();
 			
-			double[] arrValues = null;
-			if (_arrCells.dataType == MLDataType.miDOUBLE) 
-				arrValues = new double[_arrCells.numOfBytesBody / _arrCells.dataType.bytes];
+			if (dim1 == 1 || dim2 == 1) { //Read the array.
+				double[] arrValues = null;
+				if (_arrCells.dataType == MLDataType.miDOUBLE) 
+					arrValues = new double[_arrCells.numOfBytesBody / _arrCells.dataType.bytes];
+					
+				int iRedBytes = 0;
+				int index = 0;
+				while (iRedBytes < _arrCells.numOfBytesBody) {
+					//Read the next number.
+					double value = _reader.readBytes(_arrCells.dataType.bytes).getDouble();
+					arrValues[index] = value;
+					iRedBytes += _arrCells.dataType.bytes;
+					index++;
+				}
 				
-			int iRedBytes = 0;
-			int index = 0;
-			while (iRedBytes < _arrCells.numOfBytesBody) {
-				//Read the next number.
-				double value = _reader.readBytes(_arrCells.dataType.bytes).getDouble();
-				arrValues[index] = value;
-				iRedBytes += _arrCells.dataType.bytes;
-				index++;
+				mldata.dataType = DataType.ARRAY_DOUBLE;
+				mldata.dataValue = arrValues;	
+			} else { //Read the matrix.
+				double[][] matrixValues = null;
+				if (_arrCells.dataType == MLDataType.miDOUBLE)
+					matrixValues = new double[dim1][dim2];
+				
+				int iRedBytes = 0;
+				int idxi = 0;
+				int idxj = 0;
+				while (iRedBytes < _arrCells.numOfBytesBody) {
+					//Read the next number.
+					double value = _reader.readBytes(_arrCells.dataType.bytes).getDouble();
+					matrixValues[idxi][idxj] = value;
+					idxi = (idxi + 1) % dim1;
+					idxj = idxi == 0 ? (idxj + 1) % dim2 : idxj;
+					iRedBytes += _arrCells.dataType.bytes;
+				}
+				
+				mldata.dataType = DataType.MATRIX_DOUBLE;
+				mldata.dataValue = matrixValues;	
 			}
-			
-			mldata.dataType = DataType.ARRAY_DOUBLE;
-			mldata.dataValue = arrValues;
-			
 		} else if (dataType == MLDataType.miUINT32.value) {
 			/*int iNumBytesToRead = MLDataType.dataTypeFromValue(dataType).bytes;
 			ByteBuffer buffer = _reader.readBytes(iNumBytesToRead);

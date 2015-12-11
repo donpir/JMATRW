@@ -37,7 +37,7 @@ public class TC01ReadArrayTestCase extends TestCase {
 	 * @throws IOException
 	 */
 		
-	public void testVersion() throws IOException {
+	public void testExample01Array() throws IOException {
 		//Open the file.
 		InputStream fis = TestCase.class.getResourceAsStream("/basicexamples/example01_array.mat");
 		assertNotNull(fis);
@@ -59,6 +59,35 @@ public class TC01ReadArrayTestCase extends TestCase {
 		assertTrue(arrDouble[0] == 1.0);
 		assertTrue(arrDouble[1] == 3.0);
 		assertTrue(arrDouble[2] == 2.0);
+	}//EndTest.
+	
+	/*
+	 * A is a 3x3 matrix.
+	 * A = [1, 1, 2; 3, 5, 8; 13, 21, 34]
+	 */
+	
+	public void testExample02Matrix() throws IOException {
+		//Open the file.
+		InputStream fis = TestCase.class.getResourceAsStream("/basicexamples/example02_matrix.mat");
+		assertNotNull(fis);
+		
+		//Create the reader.
+		JMATReader controller = new JMATReader(fis);
+		JMATData matdata = controller.read();
+		
+		//Check file version.
+		assertTrue(matdata.header.contains("MATLAB"));
+		assertTrue(matdata.version == 1);
+		
+		//Check file content.
+		assertTrue(matdata.dataType == DataType.MATRIX_DOUBLE);
+		assertEquals("A", matdata.dataName);
+		
+		double[][] arrDouble = (double[][]) matdata.dataValue;
+		assertTrue(arrDouble.length == 3);
+		assertTrue(arrDouble[0][0] == 1.0);
+		assertTrue(arrDouble[0][1] == 1.0);
+		assertTrue(arrDouble[0][2] == 2.0);
 	}//EndTest.
 	
 }//EndTestCase.

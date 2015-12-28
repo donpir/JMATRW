@@ -92,4 +92,9 @@ public class JMatInput {
 	
 	public InputStream getInputStream() { return _is; }
 	
+	public void close() throws IOException {
+		if (_is != null)
+			_is.close();
+	}//EndMethod.
+	
 }//EndClass.

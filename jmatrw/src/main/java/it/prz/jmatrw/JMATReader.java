@@ -227,4 +227,8 @@ public class JMATReader {
 		if (endianIndicator.equalsIgnoreCase("IM")) _input.setEndianEncoding(ByteArrayOrder.LITTLE_ENDIAN);
 	}//EndMethod.
 	
+	public void close() throws IOException {
+		_input.close();
+	}//EndMethod.
+	
 }//EndClass.

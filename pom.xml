@@ -4,11 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.prz</groupId>
 	<artifactId>jmatrw-mvn-parent-project</artifactId>
-	<version>0.1</version>
+	<version>0.2</version>
 	<packaging>pom</packaging>
 	<name>JMATRW Maven Parent Project</name>
 	
 	<modules>
 		<module>jmatrw</module>
+		
+		<module>jmatrw4spark</module>
 	</modules>
 </project>

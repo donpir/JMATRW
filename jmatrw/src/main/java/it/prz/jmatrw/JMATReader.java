@@ -81,7 +81,7 @@ public class JMATReader {
 			
 			//Array name.
 			DataElement _arrName = _reader.readDataElementHeader();
-			assert (_dimArray.dataType == MLDataType.miINT8);
+			assert (_arrName.dataType == MLDataType.miINT8);
 			
 			//TODO: probably it can be moved inside the readDataElementHeader()
 			if (_arrName.dataElementType == DEType.STANDARD && _arrName.numOfBytesBody % 8 != 0)

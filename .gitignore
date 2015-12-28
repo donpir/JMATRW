@@ -1,5 +1,0 @@
-#It ignores the Eclipse IDE files
-.settings
-
-#It ignores the bin directory.
-bin

@@ -8,6 +8,8 @@ import java.net.URL;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.InputFormat;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
@@ -42,7 +44,7 @@ public class RecordReaderTestCase extends TestCase {
 		//Create the InputFormat
 		InputFormat inputFormat = ReflectionUtils.newInstance(JMATFileInputFormat.class, conf);
 		TaskAttemptContext context = new TaskAttemptContextImpl(conf, new TaskAttemptID());
-		RecordReader reader = inputFormat.createRecordReader(fileSplit, context);
+		RecordReader<LongWritable, DoubleWritable> reader = inputFormat.createRecordReader(fileSplit, context);
 		
 		reader.initialize(fileSplit, context);
 	}//EndTest.

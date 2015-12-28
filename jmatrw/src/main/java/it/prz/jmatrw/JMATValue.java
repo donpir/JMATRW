@@ -18,22 +18,17 @@
 
 package it.prz.jmatrw;
 
-/**
- * 
- * @author Donato Pirozzi - donatopirozzi@gmail.com
- */
-public class JMATData {
+public class JMATValue {
 
-	public enum DataType { ARRAY_DOUBLE, MATRIX_DOUBLE }
+	public long indexPosition;
+	public double value;
 	
-	//MAT file header info.
-	public String header;
-	public int version;
+	public JMATValue() {}
+
+	public JMATValue(long indexPosition, double value) {
+		super();
+		this.indexPosition = indexPosition;
+		this.value = value;
+	}//EndConstructor.
 	
-	//MAT file data content.
-	public String dataName;
-	public DataType dataType;
-	public Object dataValue;
-	public long dataNumOfItems;
-		
 }//EndClass.

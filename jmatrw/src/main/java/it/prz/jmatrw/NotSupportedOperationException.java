@@ -18,22 +18,7 @@
 
 package it.prz.jmatrw;
 
-/**
- * 
- * @author Donato Pirozzi - donatopirozzi@gmail.com
- */
-public class JMATData {
+public class NotSupportedOperationException extends Error {
+	private static final long serialVersionUID = 1L;
 
-	public enum DataType { ARRAY_DOUBLE, MATRIX_DOUBLE }
-	
-	//MAT file header info.
-	public String header;
-	public int version;
-	
-	//MAT file data content.
-	public String dataName;
-	public DataType dataType;
-	public Object dataValue;
-	public long dataNumOfItems;
-		
-}//EndClass.
+}

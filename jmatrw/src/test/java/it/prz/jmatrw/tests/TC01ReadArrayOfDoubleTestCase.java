@@ -24,13 +24,14 @@ import java.io.InputStream;
 import it.prz.jmatrw.JMATData;
 import it.prz.jmatrw.JMATData.DataType;
 import it.prz.jmatrw.JMATReader;
+import it.prz.jmatrw.JMATValue;
 import junit.framework.TestCase;
 
 /**
  * 
  * @author Donato Pirozzi - donatopirozzi@gmail.com
  */
-public class TC01ReadArrayTestCase extends TestCase {
+public class TC01ReadArrayOfDoubleTestCase extends TestCase {
 
 	/*
 	 * example01_array.mat contains: x = [1, 3, 2]
@@ -44,7 +45,7 @@ public class TC01ReadArrayTestCase extends TestCase {
 		
 		//Create the reader.
 		JMATReader controller = new JMATReader(fis);
-		JMATData matdata = controller.read();
+		JMATData matdata = controller.readAll();
 		
 		//Check file version.
 		assertTrue(matdata.header.contains("MATLAB"));
@@ -62,18 +63,63 @@ public class TC01ReadArrayTestCase extends TestCase {
 	}//EndTest.
 	
 	/*
+	 * example01_array.mat contains: x = [1, 3, 2]
+	 * @throws IOException
+	 */
+		
+	public void testExample02ArrayIterator() throws IOException {
+		//Open the file.
+		InputStream fis = TestCase.class.getResourceAsStream("/basicexamples/example01_array.mat");
+		assertNotNull(fis);
+		
+		//Create the reader.
+		JMATReader controller = new JMATReader(fis);
+		JMATData matdata = controller.init();
+		
+		//Check file version.
+		assertTrue(matdata.header.contains("MATLAB"));
+		assertTrue(matdata.version == 1);
+		
+		//Check file content.
+		assertTrue(matdata.dataType == DataType.ARRAY_DOUBLE);
+		assertEquals("x", matdata.dataName);
+		assertTrue(matdata.dataNumOfItems == 3);
+		
+		//First cell.
+		assertTrue(controller.hasNext());
+		JMATValue value0 = controller.next();
+		assertNotNull(value0);
+		assertTrue(value0.indexPosition == 0);
+		assertTrue(value0.value == 1.0);
+		
+		//Second cell.
+		assertTrue(controller.hasNext());
+		JMATValue value1 = controller.next();
+		assertNotNull(value1);
+		assertTrue(value1.indexPosition == 1);
+		assertTrue(value1.value == 3.0);
+		
+		//Third cell.
+		assertTrue(controller.hasNext());
+		JMATValue value2 = controller.next();
+		assertNotNull(value2);
+		assertTrue(value2.indexPosition == 2);
+		assertTrue(value2.value == 2.0);
+	}//EndTest.
+	
+	/*
 	 * A is a 3x3 matrix.
 	 * A = [1, 1, 2; 3, 5, 8; 13, 21, 34]
 	 */
 	
-	public void testExample02Matrix() throws IOException {
+	public void testExample03Matrix() throws IOException {
 		//Open the file.
 		InputStream fis = TestCase.class.getResourceAsStream("/basicexamples/example02_matrix.mat");
 		assertNotNull(fis);
 		
 		//Create the reader.
 		JMATReader controller = new JMATReader(fis);
-		JMATData matdata = controller.read();
+		JMATData matdata = controller.readAll();
 		
 		//Check file version.
 		assertTrue(matdata.header.contains("MATLAB"));

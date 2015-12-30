@@ -35,7 +35,15 @@ import it.prz.jmatrw.utils.ByteArray.ByteArrayOrder;
 public class JMatInput {
 
 	private InputStream _is = null;
-	private ByteArrayOrder endianEncoding = ByteArrayOrder.BIG_ENDIAN; 
+	private ByteArrayOrder endianEncoding = ByteArrayOrder.BIG_ENDIAN;
+	
+	private long lTotBytesRead = 0;
+	
+	/*
+	 * Retrieve the number of bytes read until now.
+	 * @return Number of total bytes read.
+	 */
+	public long getTotalOfBytesRead() { return lTotBytesRead; }
 	
 	public JMatInput(InputStream is) { 
 		this._is = is;
@@ -45,19 +53,41 @@ public class JMatInput {
 
 	public ByteArrayOrder getEndianEncoding() { return endianEncoding; }
 	public void setEndianEncoding(ByteArrayOrder endianEncoding) { this.endianEncoding = endianEncoding; }
-
+	
+	/**
+	 * 
+	 * @param numOfBytes
+	 * @return An array of bytes, null for end of file.
+	 * @throws IOException
+	 */
 	public ByteArray readBytes(int numOfBytes) throws IOException {
 		if (numOfBytes <= 0) throw new IllegalArgumentException("Number of bytes to read can not be negative or zero.");
 		if (numOfBytes % 4 != 0) throw new IllegalArgumentException("Number of bytes must be multiple of 4.");
 		
 		byte[] bytes = new byte[numOfBytes]; 
 		int iNumOfRedBytes = _is.read(bytes); 
+		
+		if (iNumOfRedBytes < 0) {//EOF.
+			return null;
+		}
+		
 		if (iNumOfRedBytes != numOfBytes) {
 			String _errMsg = String.format("Number of read bytes [%d] is lesser then expected [%d].", iNumOfRedBytes, numOfBytes);
 			throw new IllegalArgumentException(_errMsg);
 		}
 		
+		lTotBytesRead += iNumOfRedBytes; //Updates the number of bytes read.
+		
 		return ByteArray.wrap(bytes, endianEncoding);
+	}//EndMethod.
+	
+	/**
+	 * It wraps the available() method of InputStream (see {@link InputStream#available()}).
+	 * @return
+	 * @throws IOException
+	 */
+	public int readBytesAvailable() throws IOException {
+		return _is.available();
 	}//EndMethod.
 	
 	public DataElement readDataElementHeader() throws IOException {
@@ -89,9 +119,7 @@ public class JMatInput {
 		
 		return dataElement;
 	}//EndMethod.
-	
-	public InputStream getInputStream() { return _is; }
-	
+
 	public void close() throws IOException {
 		if (_is != null)
 			_is.close();

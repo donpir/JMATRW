@@ -15,6 +15,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
 import it.prz.jmatrw.JMATReader;
 import it.prz.jmatrw.JMATValue;
+import it.prz.jmatrw.matdatatypes.MLDataType;
 
 
 public class JMATFileRecordReader extends RecordReader<Long, Double> {
@@ -34,33 +35,32 @@ public class JMATFileRecordReader extends RecordReader<Long, Double> {
 		Path filePath = fileSplit.getPath();
 
 		FileSystem fs = filePath.getFileSystem(cfg);
-		FSDataInputStream is = fs.open(fileSplit.getPath());
+		FSDataInputStream dis = fs.open(fileSplit.getPath());
 		
 		//Initialise the block boundaries.
-		lBlockStart = 1; //fileSplit.getStart();
-		lBlockLength = 2; //fileSplit.getLength();
+		lBlockStart = fileSplit.getStart();
+		lBlockLength = fileSplit.getLength();
 		lBlockEnd = lBlockStart + lBlockLength;
 		lBlockCurPos = lBlockStart;
 		
 		//Initialise the object to read the *.mat file.
-		_matReader = new JMATReader(is);
+		_matReader = new JMATReader(dis);
 		_matReader.init();
+		
+		//move the file pointer to the start location.
+		dis.seek(lBlockStart);
 	}//EndMethod.
 
 	@Override
 	public boolean nextKeyValue() throws IOException, InterruptedException {
-		//if (key == null) key = new Long(0);
-		//if (value == null) value = new Double(0);
-		
 		if (lBlockCurPos == lBlockEnd) return false;
 		if (_matReader.hasNext() == false) return false;
 		
-		JMATValue matValue = _matReader.next();
-		lBlockCurPos = matValue.indexPosition;
-		key = new Long(lBlockCurPos);
-		value = new Double(matValue.value);
+		key = (lBlockCurPos - lBlockStart) / MLDataType.miDOUBLE.bytes;
+		value = _matReader.next();
+		lBlockCurPos += MLDataType.miDOUBLE.bytes;
 		
-		return true;
+		return (value != null);
 	}//EndMethod.
 
 	@Override

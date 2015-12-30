@@ -1,30 +1,33 @@
 package it.prz.jmatrw4spark.tests;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
+import java.util.List;
 
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.InputFormat;
+import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.apache.hadoop.mapreduce.JobID;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.TaskAttemptID;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
+import org.apache.hadoop.mapreduce.task.JobContextImpl;
 import org.apache.hadoop.mapreduce.task.TaskAttemptContextImpl;
+import org.apache.hadoop.util.ReflectionUtils;
 
-import junit.framework.TestCase;
+import it.prz.jmatrw4spark.JMATFileInputFormat;
 
-public class RecordReaderTestCase extends BaseSparkTestCase {
+public class SplitTestCase extends BaseSparkTestCase {
 
-	public void testRecordReader() throws URISyntaxException, IOException, InterruptedException {
-		//Create the path.
-		URL urlFile =  TestCase.class.getResource("/basicexamples/example01_array.mat");
-		assertNotNull(urlFile);
-		URI uriFile = urlFile.toURI();
-		assertNotNull(uriFile);
-		Path filePath = new Path(uriFile);
+	public void testInit() throws URISyntaxException, IOException, InterruptedException {
+		JobContext jobCtx = new JobContextImpl(conf, new JobID());
+		List<InputSplit> lstSplits = inputFormat.getSplits(jobCtx);
+		assertNotNull(lstSplits);
+		assertTrue(lstSplits.size() > 0);
 		
-		FileSplit fileSplit = new FileSplit(filePath, 184, 24, null);
+		FileSplit fileSplit = (FileSplit) lstSplits.get(0);
+		assertNotNull(fileSplit);
 		
 		//Create the reader.
 		TaskAttemptContext context = new TaskAttemptContextImpl(conf, new TaskAttemptID());
@@ -40,13 +43,13 @@ public class RecordReaderTestCase extends BaseSparkTestCase {
 		
 		//key-1.
 		assertTrue(reader.nextKeyValue() == true);
-		assertTrue(reader.getCurrentKey().longValue() == 1);
+		assertTrue(reader.getCurrentKey() == 1);
 		assertTrue(reader.getCurrentValue() == 3.0);
 		
 		//key-2.
 		assertTrue(reader.nextKeyValue() == true);
-		assertTrue(reader.getCurrentKey().longValue() == 2);
+		assertTrue(reader.getCurrentKey() == 2);
 		assertTrue(reader.getCurrentValue() == 2.0);
 	}//EndTest.
 	
-}//EndClass.
+}//EndTestCase.

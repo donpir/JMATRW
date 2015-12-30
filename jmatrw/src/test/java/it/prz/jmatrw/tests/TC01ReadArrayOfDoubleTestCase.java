@@ -24,7 +24,6 @@ import java.io.InputStream;
 import it.prz.jmatrw.JMATData;
 import it.prz.jmatrw.JMATData.DataType;
 import it.prz.jmatrw.JMATReader;
-import it.prz.jmatrw.JMATValue;
 import junit.framework.TestCase;
 
 /**
@@ -87,24 +86,12 @@ public class TC01ReadArrayOfDoubleTestCase extends TestCase {
 		
 		//First cell.
 		assertTrue(controller.hasNext());
-		JMATValue value0 = controller.next();
-		assertNotNull(value0);
-		assertTrue(value0.indexPosition == 0);
-		assertTrue(value0.value == 1.0);
-		
-		//Second cell.
-		assertTrue(controller.hasNext());
-		JMATValue value1 = controller.next();
-		assertNotNull(value1);
-		assertTrue(value1.indexPosition == 1);
-		assertTrue(value1.value == 3.0);
-		
-		//Third cell.
-		assertTrue(controller.hasNext());
-		JMATValue value2 = controller.next();
-		assertNotNull(value2);
-		assertTrue(value2.indexPosition == 2);
-		assertTrue(value2.value == 2.0);
+		Double value0 = controller.next();
+		assertTrue(value0 == 1.0);
+		Double value1 = controller.next();
+		assertTrue(value1 == 3.0);
+		Double value2 = controller.next();
+		assertTrue(value2 == 2.0);
 	}//EndTest.
 	
 	/*

@@ -18,6 +18,7 @@
 
 package it.prz.jmatrw;
 
+@Deprecated
 public class JMATValue {
 
 	public long indexPosition;

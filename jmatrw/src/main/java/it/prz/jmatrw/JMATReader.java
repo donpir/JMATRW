@@ -20,7 +20,6 @@ package it.prz.jmatrw;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 
 import it.prz.jmatrw.JMATData.DataType;
 import it.prz.jmatrw.io.DataElement;
@@ -28,6 +27,7 @@ import it.prz.jmatrw.io.DataElement.DEType;
 import it.prz.jmatrw.io.JMatInput;
 import it.prz.jmatrw.matdatatypes.MLArrayTypeClass;
 import it.prz.jmatrw.matdatatypes.MLDataType;
+import it.prz.jmatrw.utils.ByteArray;
 import it.prz.jmatrw.utils.ByteArray.ByteArrayOrder;
 
 /**
@@ -43,7 +43,6 @@ public class JMATReader {
 	private JMatInput _input = null;
 	private JMATData mldata = new JMATData();
 	private ReaderStatus _status = ReaderStatus.INIT;
-	private int _iCurPos = 0;
 	
 	public JMATReader(InputStream is) { _input = new JMatInput(is); }//EndConstructor.
 	
@@ -67,6 +66,7 @@ public class JMATReader {
 		readMATVersion();
 		readDataHeader();
 		_status = ReaderStatus.NEXT_DATA;
+		
 		return mldata;
 	}//EndMethod.
 	
@@ -74,7 +74,26 @@ public class JMATReader {
 	 * It read the next element of an array.
 	 * @throws IOException 
 	 */
-	public JMATValue next() throws IOException {
+	public Double next() throws IOException {
+		if (mldata.dataType != JMATData.DataType.ARRAY_DOUBLE)
+			throw new IllegalStateException("Expected an array of doubles.");
+		
+		ByteArray arrData = _input.readBytes(MLDataType.miDOUBLE.bytes);
+				
+		if (arrData == null) { //EOF.
+			_status = ReaderStatus.END;
+			return null;
+		}
+		
+		double value = arrData.getDouble();
+		return value;
+	}//EndMethod.
+	
+	/**
+	 * It read the next element of an array.
+	 * @throws IOException 
+	 */
+	/*public JMATValue next() throws IOException {
 		if (mldata.dataType != JMATData.DataType.ARRAY_DOUBLE)
 			throw new IllegalStateException("Expected an array of doubles.");
 		
@@ -92,18 +111,10 @@ public class JMATReader {
 		}
 		
 		return null;
-	}//EndMethod.
+	}//EndMethod.*/
 
-	/**
-	 * In the original Iterator implementation, this method: 
-	 * "Removes from the underlying collection the last element 
-	 * returned by this iterator (optional operation)."
-	 * This operation cannot be supported by this reader.
-	 */
-	//public void remove() { throw new NotSupportedOperationException(); }
-	
-	public boolean hasNext() {
-		return (_status == ReaderStatus.NEXT_DATA); 
+	public boolean hasNext() throws IOException {
+		return (_input.readBytesAvailable() > 0);
 	}//EndMethod.
 		
 	private int readDataHeader() throws IOException {
@@ -199,9 +210,11 @@ public class JMATReader {
 	private void readEntireArrayContent() throws IOException {
 		double[] arrValues = new double[(int) mldata.dataNumOfItems];
 
+		int _iCurIdx = 0;
 		while (this.hasNext()) {
-			JMATValue value = this.next();
-			arrValues[(int) value.indexPosition] = value.value;
+			Double value = this.next();
+			arrValues[_iCurIdx] = value;
+			_iCurIdx++;
 		}
 		
 		mldata.dataValue = arrValues;

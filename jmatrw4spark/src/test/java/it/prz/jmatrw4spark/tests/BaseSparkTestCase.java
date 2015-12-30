@@ -21,4 +21,9 @@ public class BaseSparkTestCase extends TestCase {
 		inputFormat = ReflectionUtils.newInstance(JMATFileInputFormat.class, conf);
 	}//EndMethod.
 	
+	public void testBase() {
+		assertNotNull(conf);
+		assertNotNull(inputFormat);
+	}//EndTest.
+	
 }//EndClass.

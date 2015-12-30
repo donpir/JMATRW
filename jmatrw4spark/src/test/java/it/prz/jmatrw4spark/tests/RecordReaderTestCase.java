@@ -44,9 +44,13 @@ public class RecordReaderTestCase extends TestCase {
 		//Create the InputFormat
 		InputFormat inputFormat = ReflectionUtils.newInstance(JMATFileInputFormat.class, conf);
 		TaskAttemptContext context = new TaskAttemptContextImpl(conf, new TaskAttemptID());
-		RecordReader<LongWritable, DoubleWritable> reader = inputFormat.createRecordReader(fileSplit, context);
+		RecordReader<Long, Double> reader = inputFormat.createRecordReader(fileSplit, context);
 		
 		reader.initialize(fileSplit, context);
+		
+		assertTrue(reader.getCurrentKey() == null);
+		assertTrue(reader.nextKeyValue() == true);
+		assertTrue(reader.getCurrentKey().longValue() == 0);
 	}//EndTest.
 	
 }//EndClass.

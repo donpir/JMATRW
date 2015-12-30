@@ -1,0 +1,8 @@
+import java.lang.Long
+import java.lang.Double
+import it.prz.jmatrw4spark.JMATFileInputFormat
+
+import org.apache.hadoop.conf.Configuration
+val conf = new Configuration(sc.hadoopConfiguration)
+
+val matrdd = sc.newAPIHadoopFile("e:/tmp/example01_array.mat", classOf[JMATFileInputFormat], classOf[LongWritable], classOf[DoubleWritable], conf)

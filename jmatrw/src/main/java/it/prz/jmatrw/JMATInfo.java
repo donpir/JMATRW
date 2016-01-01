@@ -19,10 +19,12 @@
 package it.prz.jmatrw;
 
 /**
- * 
+ * Contains a summary of the mat file content. 
+ * Note: it does not contain directly the data, but only metadata
+ * on the mat file and its content.
  * @author Donato Pirozzi - donatopirozzi@gmail.com
  */
-public class JMATData {
+public class JMATInfo {
 
 	public enum DataType { ARRAY_DOUBLE, MATRIX_DOUBLE }
 	
@@ -35,5 +37,5 @@ public class JMATData {
 	public DataType dataType;
 	public Object dataValue;
 	public long dataNumOfItems;
-		
+	
 }//EndClass.

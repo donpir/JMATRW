@@ -1,20 +1,38 @@
+/*
+ * (C) Copyright 2015 Donato Pirozzi <donatopirozzi@gmail.com>
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser General Public License
+ * (LGPL) version 3 which accompanies this distribution (See the COPYING.LESSER
+ * file at the top-level directory of this distribution.), and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.html
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * Contributors:
+ *     Donato Pirozzi
+ */
+
 package it.prz.jmatrw4spark;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.DoubleWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
 import it.prz.jmatrw.JMATReader;
-import it.prz.jmatrw.JMATValue;
+import it.prz.jmatrw.io.seekable.Seeker;
+import it.prz.jmatrw.io.seekable.UnsupportedSeekOperation;
 import it.prz.jmatrw.matdatatypes.MLDataType;
 
 
@@ -45,10 +63,19 @@ public class JMATFileRecordReader extends RecordReader<Long, Double> {
 		
 		//Initialise the object to read the *.mat file.
 		_matReader = new JMATReader(dis);
-		_matReader.init();
 		
 		//move the file pointer to the start location.
-		dis.seek(lBlockStart);
+		_matReader.seek(lBlockStart, new Seeker() {
+			@Override
+			public boolean seekTo(long lBytePos, InputStream is) throws IOException {
+				if (is instanceof FSDataInputStream == false)
+					throw new UnsupportedSeekOperation("Unknown input stream " + is.getClass().getName());
+				
+				((FSDataInputStream) is).seek(lBytePos);
+				
+				return true;
+			}
+		});
 	}//EndMethod.
 
 	@Override

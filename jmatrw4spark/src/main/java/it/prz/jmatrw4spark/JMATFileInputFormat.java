@@ -1,3 +1,21 @@
+/*
+ * (C) Copyright 2015 Donato Pirozzi <donatopirozzi@gmail.com>
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser General Public License
+ * (LGPL) version 3 which accompanies this distribution (See the COPYING.LESSER
+ * file at the top-level directory of this distribution.), and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.html
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * Contributors:
+ *     Donato Pirozzi
+ */
+
 package it.prz.jmatrw4spark;
 
 import java.io.IOException;
@@ -18,7 +36,7 @@ import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 
-import it.prz.jmatrw.JMATData;
+import it.prz.jmatrw.JMATInfo;
 import it.prz.jmatrw.JMATReader;
 import it.prz.jmatrw.matdatatypes.MLDataType;
 
@@ -50,7 +68,7 @@ public class JMATFileInputFormat extends FileInputFormat<Long, Double> {
 	    	FileSystem fs = filePath.getFileSystem(job.getConfiguration());
 	    	FSDataInputStream dis = fs.open(filePath);
 	    	JMATReader _matReader = new JMATReader(dis);
-	    	JMATData _matdata = _matReader.init();
+	    	JMATInfo _matdata = _matReader.getInfo();
 	    	
 	    	long length = _matdata.dataNumOfItems * MLDataType.miDOUBLE.bytes; //Content length.
 	    	long lContentByteOffset = dis.getPos();
@@ -123,36 +141,5 @@ public class JMATFileInputFormat extends FileInputFormat<Long, Double> {
 		//The split size is the length of a mat file double.
 		return MLDataType.miDOUBLE.bytes;
 	}//EndMethod.
-
-	/**
-	 * It opens the mat file and calculates the array content length in bytes.
-	 * @param job
-	 * @param filePath
-	 * @return
-	 * @throws IOException
-	 */
-	protected long getContentLength(JobContext job, Path filePath) throws IOException {
-		FileSystem fs = filePath.getFileSystem(job.getConfiguration());
-    	FSDataInputStream dis = fs.open(filePath);
-    	JMATReader _matReader = new JMATReader(dis);
-    	JMATData _matdata = _matReader.init();
-    	
-    	long length = _matdata.dataNumOfItems * MLDataType.miDOUBLE.bytes; //Content length.
-    	_matReader.close();
-    	_matReader = null;
-    	dis = null;
-    	
-    	return length;
-	}//EndMethod.
-	
-	
-	/*@Override
-	protected boolean isSplitable(JobContext context, Path filename) {
-		// TODO Auto-generated method stub
-		//return super.isSplitable(context, filename);
-		return false;
-	}//EndClass.*/
-	
-	
 
 }//EndClass.

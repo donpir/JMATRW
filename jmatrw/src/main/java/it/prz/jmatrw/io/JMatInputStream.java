@@ -19,8 +19,11 @@
 package it.prz.jmatrw.io;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.InflaterInputStream;
 
 import it.prz.jmatrw.io.DataElement.DEType;
+import it.prz.jmatrw.io.seekable.ISeekable;
+import it.prz.jmatrw.io.seekable.Seeker;
 import it.prz.jmatrw.matdatatypes.MLDataType;
 import it.prz.jmatrw.matdatatypes.UnknownMLDataTypeException;
 import it.prz.jmatrw.utils.ByteArray;
@@ -32,20 +35,20 @@ import it.prz.jmatrw.utils.ByteArray.ByteArrayOrder;
  * encoding differences. 
  * @author Donato Pirozzi - donatopirozzi@gmail.com
  */
-public class JMatInput {
+public class JMatInputStream implements ISeekable {
 
 	private InputStream _is = null;
 	private ByteArrayOrder endianEncoding = ByteArrayOrder.BIG_ENDIAN;
 	
-	private long lTotBytesRead = 0;
+	private long lHeadBytePosition = 0;
 	
 	/*
 	 * Retrieve the number of bytes read until now.
 	 * @return Number of total bytes read.
 	 */
-	public long getTotalOfBytesRead() { return lTotBytesRead; }
+	public long getHeadBytePosition() { return lHeadBytePosition; }
 	
-	public JMatInput(InputStream is) { 
+	public JMatInputStream(InputStream is) { 
 		this._is = is;
 		if (is == null)
 			throw new IllegalArgumentException("The InputStream given to the Reader is null.");
@@ -76,18 +79,9 @@ public class JMatInput {
 			throw new IllegalArgumentException(_errMsg);
 		}
 		
-		lTotBytesRead += iNumOfRedBytes; //Updates the number of bytes read.
+		lHeadBytePosition += iNumOfRedBytes; //Updates the number of bytes read.
 		
 		return ByteArray.wrap(bytes, endianEncoding);
-	}//EndMethod.
-	
-	/**
-	 * It wraps the available() method of InputStream (see {@link InputStream#available()}).
-	 * @return
-	 * @throws IOException
-	 */
-	public int readBytesAvailable() throws IOException {
-		return _is.available();
 	}//EndMethod.
 	
 	public DataElement readDataElementHeader() throws IOException {
@@ -119,7 +113,31 @@ public class JMatInput {
 		
 		return dataElement;
 	}//EndMethod.
-
+	
+	/**
+	 * It allows the change of the internal input stream, 
+	 * for instance to support a GZipInputStream at some point.
+	 * @param is
+	 * @throws IOException 
+	 */
+	public void switchToGZipInputStream(int numOfBytes) throws IOException {
+		_is = new InflaterInputStream(_is);
+	}//EndMethod.
+	
+	public boolean seek(long lBytePos, Seeker seeker) throws IOException {
+		boolean success = seeker.seekTo(lBytePos, _is);
+		if (success) {
+			lHeadBytePosition = lBytePos;
+			return true;
+		} 
+		
+		return false;
+	}//EndMethod.
+	
+	/**
+	 * Release resources, in particular it closes the InputStream.
+	 * @throws IOException
+	 */
 	public void close() throws IOException {
 		if (_is != null)
 			_is.close();

@@ -36,6 +36,8 @@ public class MLDataType {
 	
 	public static final MLDataType miMATRIX = new MLDataType(14, 0, "miMATRIX"); 
 	
+	public static final MLDataType miCOMPRESSED = new MLDataType(15, 0, "miCOMPRESSED");
+	
 	private static final Map<Integer, MLDataType> dataTypes = new HashMap<Integer, MLDataType>(); 
 	public static MLDataType dataTypeFromValue(int index) { return dataTypes.get(index); }
 	
@@ -45,6 +47,7 @@ public class MLDataType {
 		dataTypes.put(miUINT32.value, miUINT32);
 		dataTypes.put(miDOUBLE.value, miDOUBLE);
 		dataTypes.put(miMATRIX.value, miMATRIX);
+		dataTypes.put(miCOMPRESSED.value, miCOMPRESSED);
 	}
 	
 	public final int value;

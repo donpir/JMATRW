@@ -21,8 +21,8 @@ package it.prz.jmatrw.tests;
 import java.io.IOException;
 import java.io.InputStream;
 
-import it.prz.jmatrw.JMATData;
-import it.prz.jmatrw.JMATData.DataType;
+import it.prz.jmatrw.JMATInfo;
+import it.prz.jmatrw.JMATInfo.DataType;
 import it.prz.jmatrw.JMATReader;
 import junit.framework.TestCase;
 
@@ -36,15 +36,14 @@ public class TC01ReadArrayOfDoubleTestCase extends TestCase {
 	 * example01_array.mat contains: x = [1, 3, 2]
 	 * @throws IOException
 	 */
-		
 	public void testExample01Array() throws IOException {
 		//Open the file.
-		InputStream fis = TestCase.class.getResourceAsStream("/basicexamples/example01_array.mat");
+		InputStream fis = TestCase.class.getResourceAsStream("/tc01NoCompression/example01_array.mat");
 		assertNotNull(fis);
 		
 		//Create the reader.
-		JMATReader controller = new JMATReader(fis);
-		JMATData matdata = controller.readAll();
+		JMATReader reader = new JMATReader(fis);
+		JMATInfo matdata = reader.getInfo();
 		
 		//Check file version.
 		assertTrue(matdata.header.contains("MATLAB"));
@@ -54,26 +53,25 @@ public class TC01ReadArrayOfDoubleTestCase extends TestCase {
 		assertTrue(matdata.dataType == DataType.ARRAY_DOUBLE);
 		assertEquals("x", matdata.dataName);
 		
-		double[] arrDouble = (double[]) matdata.dataValue;
-		assertTrue(arrDouble.length == 3);
-		assertTrue(arrDouble[0] == 1.0);
-		assertTrue(arrDouble[1] == 3.0);
-		assertTrue(arrDouble[2] == 2.0);
+		//It reads the values.
+		assertTrue(reader.hasNext());
+		assertEquals(1.0, reader.next());
+		
+		assertTrue(reader.hasNext());
+		assertEquals(3.0, reader.next());
+		
+		assertTrue(reader.hasNext());
+		assertEquals(2.0, reader.next());
 	}//EndTest.
 	
-	/*
-	 * example01_array.mat contains: x = [1, 3, 2]
-	 * @throws IOException
-	 */
-		
-	public void testExample02ArrayIterator() throws IOException {
+	public void testExample01ArraySum() throws IOException {
 		//Open the file.
-		InputStream fis = TestCase.class.getResourceAsStream("/basicexamples/example01_array.mat");
+		InputStream fis = TestCase.class.getResourceAsStream("/tc01NoCompression/example01_array.mat");
 		assertNotNull(fis);
 		
 		//Create the reader.
-		JMATReader controller = new JMATReader(fis);
-		JMATData matdata = controller.init();
+		JMATReader reader = new JMATReader(fis);
+		JMATInfo matdata = reader.getInfo();
 		
 		//Check file version.
 		assertTrue(matdata.header.contains("MATLAB"));
@@ -82,16 +80,18 @@ public class TC01ReadArrayOfDoubleTestCase extends TestCase {
 		//Check file content.
 		assertTrue(matdata.dataType == DataType.ARRAY_DOUBLE);
 		assertEquals("x", matdata.dataName);
-		assertTrue(matdata.dataNumOfItems == 3);
 		
-		//First cell.
-		assertTrue(controller.hasNext());
-		Double value0 = controller.next();
-		assertTrue(value0 == 1.0);
-		Double value1 = controller.next();
-		assertTrue(value1 == 3.0);
-		Double value2 = controller.next();
-		assertTrue(value2 == 2.0);
+		//It reads the values.
+		int count = 0;
+		double sum = 0;
+		while (reader.hasNext()) {
+			double value = reader.next();
+			sum += value;
+			count++;
+		}
+		
+		assertTrue(count == 3);
+		assertTrue(sum == 6);
 	}//EndTest.
 	
 	/*
@@ -101,12 +101,12 @@ public class TC01ReadArrayOfDoubleTestCase extends TestCase {
 	
 	public void testExample03Matrix() throws IOException {
 		//Open the file.
-		InputStream fis = TestCase.class.getResourceAsStream("/basicexamples/example02_matrix.mat");
+		InputStream fis = TestCase.class.getResourceAsStream("/tc01NoCompression/example02_matrix.mat");
 		assertNotNull(fis);
 		
 		//Create the reader.
-		JMATReader controller = new JMATReader(fis);
-		JMATData matdata = controller.readAll();
+		JMATReader reader = new JMATReader(fis);
+		JMATInfo matdata = reader.getInfo();
 		
 		//Check file version.
 		assertTrue(matdata.header.contains("MATLAB"));
@@ -115,7 +115,8 @@ public class TC01ReadArrayOfDoubleTestCase extends TestCase {
 		//Check file content.
 		assertTrue(matdata.dataType == DataType.MATRIX_DOUBLE);
 		assertEquals("A", matdata.dataName);
-		
+				
+		//Read the entire matrix.
 		double[][] arrDouble = (double[][]) matdata.dataValue;
 		assertTrue(arrDouble.length == 3);
 		assertTrue(arrDouble[0][0] == 1.0);

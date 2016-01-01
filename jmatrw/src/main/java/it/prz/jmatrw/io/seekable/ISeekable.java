@@ -16,20 +16,12 @@
  *     Donato Pirozzi
  */
 
-package it.prz.jmatrw;
+package it.prz.jmatrw.io.seekable;
 
-@Deprecated
-public class JMATValue {
+import java.io.IOException;
 
-	public long indexPosition;
-	public double value;
+public interface ISeekable {
+
+	public boolean seek(long lBytePos, Seeker seeker) throws IOException;
 	
-	public JMATValue() {}
-
-	public JMATValue(long indexPosition, double value) {
-		super();
-		this.indexPosition = indexPosition;
-		this.value = value;
-	}//EndConstructor.
-	
-}//EndClass.
+}//EndInterface.

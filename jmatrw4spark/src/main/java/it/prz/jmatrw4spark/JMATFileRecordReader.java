@@ -35,7 +35,6 @@ import it.prz.jmatrw.io.seekable.Seeker;
 import it.prz.jmatrw.io.seekable.UnsupportedSeekOperation;
 import it.prz.jmatrw.matdatatypes.MLDataType;
 
-
 public class JMATFileRecordReader extends RecordReader<Long, Double> {
 
 	private JMATReader _matReader = null;

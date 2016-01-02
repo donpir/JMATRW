@@ -91,7 +91,10 @@ public class JMATFileInputFormat extends FileInputFormat<Long, Double> {
 	            } else {
 	              blkLocations = fs.getFileBlockLocations(file, lContentByteOffset, length);
 	            }
-	            if (isSplitable(job, filePath)) {
+	            
+	            boolean isSplittable = isSplitable(job, filePath);
+	            LOG.debug("Current file to process " + filePath.getName() + ". Splittable? " + isSplittable);
+	            if (isSplittable) {
 	            	long blockSize = file.getBlockSize();
 	            	long splitSize = computeSplitSize(blockSize, minSize, maxSize);
 	            	
@@ -121,6 +124,28 @@ public class JMATFileInputFormat extends FileInputFormat<Long, Double> {
 	    return splits;
 	}//EndMethod.
 	
+	@Override
+	protected boolean isSplitable(JobContext context, Path filename) {
+		//A mat file can compress the single variables. When variables are
+		//compressed, they cannot be splitted on Apache Spark. So, this 
+		//piece of code determine whether the file is compressed or not and
+		//whether it is splittable.
+		try {
+	    	FileSystem fs = filename.getFileSystem(context.getConfiguration());
+	    	FSDataInputStream dis = fs.open(filename);
+	    	JMATReader _matReader = new JMATReader(dis);
+	    	JMATInfo _matdata = _matReader.getInfo();
+	    	
+	    	_matReader.close();
+	    	_matReader = null;
+	    	dis = null;
+	    	
+	    	return !_matdata.sysIsCompressed();
+		} catch (IOException ex) {
+			return false;
+		}
+	}//EndMethod.
+
 	@Override
 	protected long computeSplitSize(long blockSize, long minSize, long maxSize) {
 		long _size = super.computeSplitSize(blockSize, minSize, maxSize);

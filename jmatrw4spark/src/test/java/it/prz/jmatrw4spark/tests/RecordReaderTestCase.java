@@ -18,7 +18,7 @@ public class RecordReaderTestCase extends BaseSparkTestCase {
 
 	public void testRecordReader() throws URISyntaxException, IOException, InterruptedException {
 		//Create the path.
-		URL urlFile =  TestCase.class.getResource("/basicexamples/example01_array.mat");
+		URL urlFile =  TestCase.class.getResource("/basicexamples/vecRow01_x3.mat");
 		assertNotNull(urlFile);
 		URI uriFile = urlFile.toURI();
 		assertNotNull(uriFile);

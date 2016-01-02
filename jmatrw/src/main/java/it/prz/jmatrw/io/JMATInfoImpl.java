@@ -16,31 +16,17 @@
  *     Donato Pirozzi
  */
 
-package it.prz.jmatrw;
+package it.prz.jmatrw.io;
+
+import it.prz.jmatrw.JMATInfo;
 
 /**
- * Contains a summary of the mat file content. 
- * Note: it does not contain directly the data, but only metadata
- * on the mat file and its content.
- * @author Donato Pirozzi - donatopirozzi@gmail.com
+ * Concrete implementation of the JMATInfo. 
+ * @author Donato Pirozzi
+ *
  */
-public abstract class JMATInfo {
+class JMATInfoImpl extends JMATInfo {
 
-	public enum DataType { ARRAY_DOUBLE, MATRIX_DOUBLE }
+	public void setSysIsCompressed(boolean iscompressed) { this.sys_iscompressed = iscompressed; } //EndMethod.
 	
-	//MAT file header info.
-	public String header;
-	public int version;
-	
-	//MAT file data content.
-	public String dataName;
-	public DataType dataType;
-	public Object dataValue;
-	public long dataNumOfItems;
-	
-	//Mat file system information and metadata.
-	protected boolean sys_iscompressed = false;
-
-	public boolean sysIsCompressed() { return sys_iscompressed; }//EndMethod.
-
 }//EndClass.

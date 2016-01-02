@@ -42,7 +42,7 @@ public abstract class JMATParser implements ISeekable {
 	}*/
 	
 	protected JMatInputStream _input = null;
-	private JMATInfo matinfo = new JMATInfo();
+	private JMATInfoImpl matinfo = new JMATInfoImpl();
 	protected long lByteContentPosition = 0;
 	//private ReaderStatus _status = ReaderStatus.INIT;
 	
@@ -179,6 +179,7 @@ public abstract class JMATParser implements ISeekable {
 			
 		} else if (_dataItem.dataType == MLDataType.miCOMPRESSED) {
 			_input.switchToGZipInputStream(_dataItem.numOfBytesBody);
+			matinfo.setSysIsCompressed(true);
 			return readDataHeader();
 			
 		} else { //Unknown ML data type.

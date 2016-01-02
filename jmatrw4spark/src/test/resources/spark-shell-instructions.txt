@@ -6,9 +6,12 @@ import org.apache.spark.SparkContext._
 import org.apache.hadoop.conf.Configuration
 val conf = new Configuration(sc.hadoopConfiguration)
 
-val matrdd = sc.newAPIHadoopFile("e:/tmp/vecRow8.mat", classOf[JMATFileInputFormat], classOf[Long], classOf[Double], conf)
+val matrdd = sc.newAPIHadoopFile("e:/tmp/vecRow03_x256.mat", classOf[JMATFileInputFormat], classOf[Long], classOf[Double], conf)
+val matvalues = matrdd.map(x => x._2.toDouble)
+val stat = matvalues.stats()
 
----------
-SOMMA
+----
 
-val sumrdd = matrdd.reduce((x, y) => (0, x._2 + y._2))
+Run the mater/workers
+spark-class org.apache.spark.deploy.master.Master
+spark-class org.apache.spark.deploy.worker.Worker spark://ubuntu:7077

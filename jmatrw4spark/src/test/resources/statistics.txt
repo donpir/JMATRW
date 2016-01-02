@@ -5,3 +5,7 @@ vecRow256 sum=247,5 std=56.13 mean=0.9668
 vecRow256[1] = 58,96
 vecRow256[2] = 91,37
 vecRow256[256] = -77,33
+
+
+vecRow1024 sum=-410.8 mean=-0.40117 std=57.465
+vecRow2048 sum=1369.1 mean=0.66852 std=58.252

@@ -1,3 +1,0 @@
-vecRow10x32784 count(value > 0) = 16518
-vecRow11x57600 count(value > 0) = 28813
-vecRow12x65568 count(value > 0) = 32947

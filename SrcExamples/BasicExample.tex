@@ -1,0 +1,21 @@
+\begin{lstlisting}[style=myJavaStyle]
+//Open the file.
+InputStream fis = new FileInputStream("/tc01NoCompression/example01_array.mat");
+		
+//Create the reader.
+JMATReader reader = new JMATReader(fis);
+JMATInfo matdata = reader.getInfo();
+		
+//Some JMATInfo properties.
+boolean bIsArray = (matdata.dataType == DataType.ARRAY_DOUBLE);
+String sArrayName = matdata.dataName;
+	
+//It counts and sums the array values.
+int count = 0;
+double sum = 0;
+while (reader.hasNext()) {
+	double value = reader.next();
+	sum += value;
+	count++;
+}
+\end{lstlisting}

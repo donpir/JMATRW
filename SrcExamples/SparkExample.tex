@@ -1,3 +1,4 @@
+\begin{lstlisting}[style=myScalaStyle]
 import java.lang.Long
 import java.lang.Double
 import it.prz.jmatrw4spark.JMATFileInputFormat
@@ -6,12 +7,8 @@ import org.apache.spark.SparkContext._
 import org.apache.hadoop.conf.Configuration
 val conf = new Configuration(sc.hadoopConfiguration)
 
-val matrdd = sc.newAPIHadoopFile("e:/tmp/vecRow03_x256.mat", classOf[JMATFileInputFormat], classOf[Long], classOf[Double], conf)
+val matrdd = sc.newAPIHadoopFile("vecRow03_x256.mat", classOf[JMATFileInputFormat], classOf[Long], classOf[Double], conf)
+
 val matvalues = matrdd.map(x => x._2.toDouble)
 val stat = matvalues.stats()
-
-----
-
-Run the mater/workers
-spark-class org.apache.spark.deploy.master.Master
-spark-class org.apache.spark.deploy.worker.Worker spark://ubuntu:7077
+\end{lstlisting}

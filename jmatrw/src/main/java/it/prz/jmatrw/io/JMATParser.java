@@ -122,7 +122,7 @@ public abstract class JMATParser implements ISeekable {
 			//Dimensions Array Subelement.
             DataElement _dimArray = _input.readDataElementHeader();
 			assert (_dimArray.dataType == MLDataType.miINT32);
-			int numOfArrayDims = _dimArray.numOfBytesBody / 4;
+			int numOfArrayDims = (int) _dimArray.numOfBytesBody / 4;
 			assert (numOfArrayDims >= 2);//A Matlab array has at least two dimensions.
 			if (numOfArrayDims != 2)
 				throw new IllegalArgumentException("This version of JMATRW is able to read only one-dimensional and two-dimensional arrays");
@@ -141,8 +141,8 @@ public abstract class JMATParser implements ISeekable {
 			//TODO: probably it can be moved inside the readDataElementHeader()
 			if (_arrName.dataElementType == DEType.STANDARD && _arrName.numOfBytesBody % 8 != 0)
 				_arrName.numOfBytesBody = (_arrName.numOfBytesBody / 8 + 1) * 8;
-						
-			byte[] _bArrName = _input.readBytes(_arrName.numOfBytesBody).arrayEndian();
+			
+			byte[] _bArrName = _input.readBytes((int) _arrName.numOfBytesBody).arrayEndian();
 			matinfo.dataName = new StringBuilder(new String(_bArrName)).reverse().toString().trim();
 			
 			//Read the numbers.
@@ -178,7 +178,7 @@ public abstract class JMATParser implements ISeekable {
 			}
 			
 		} else if (_dataItem.dataType == MLDataType.miCOMPRESSED) {
-			_input.switchToGZipInputStream(_dataItem.numOfBytesBody);
+			_input.switchToGZipInputStream();
 			matinfo.setSysIsCompressed(true);
 			return readDataHeader();
 			

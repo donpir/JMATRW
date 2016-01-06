@@ -30,6 +30,6 @@ public class DataElement {
 	
 	public DEType dataElementType = DEType.STANDARD;
 	public MLDataType dataType;
-	public int numOfBytesBody;
+	public long numOfBytesBody;
 
 }//EndClass.

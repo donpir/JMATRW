@@ -99,13 +99,13 @@ public class JMatInputStream implements ISeekable {
 			//Take bytes 3 and 4 which contain the data type.
 			dataElement.dataType = MLDataType.dataTypeFromValue((int) iDataType & 0xffff);
 			//Take bytes 1 and 2, that contain the number of bytes to read.
-			dataElement.numOfBytesBody = (int) iDataType >> 16; 
+			dataElement.numOfBytesBody = iDataType >> 16; 
 			if (dataElement.numOfBytesBody < 4) dataElement.numOfBytesBody = 4;
 			//Store the Data Element Type.
 			dataElement.dataElementType = DEType.SMALL;
 		} else { //Standard Element data.
 			dataElement.dataType = MLDataType.dataTypeFromValue((int) iDataType); 
-			dataElement.numOfBytesBody = (int) readBytes(4).getUInt32();	
+			dataElement.numOfBytesBody = readBytes(4).getUInt32();	
 		}
 		
 		if (dataElement.dataType == null)
@@ -120,7 +120,7 @@ public class JMatInputStream implements ISeekable {
 	 * @param is
 	 * @throws IOException 
 	 */
-	public void switchToGZipInputStream(int numOfBytes) throws IOException {
+	public void switchToGZipInputStream() throws IOException {
 		_is = new InflaterInputStream(_is);
 	}//EndMethod.
 	

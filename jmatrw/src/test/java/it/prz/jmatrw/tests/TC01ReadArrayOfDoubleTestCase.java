@@ -124,4 +124,52 @@ public class TC01ReadArrayOfDoubleTestCase extends TestCase {
 		assertTrue(arrDouble[0][2] == 2.0);
 	}//EndTest.
 	
+	public void testVecRow06x2048() throws IOException {
+		//Open the file.
+		InputStream fis = TestCase.class.getResourceAsStream("/tc01NoCompression/vecRow06_x2048.mat");
+		assertNotNull(fis);
+		
+		//Create the reader.
+		JMATReader reader = new JMATReader(fis);
+		JMATInfo mdata = reader.getInfo();
+		assertTrue(mdata.dataNumOfItems > 0);
+		assertEquals("vecRow2048", mdata.dataName);
+	}//EndTest.
+	
+	public void testVecRow10x32784() throws IOException {
+		//Open the file.
+		InputStream fis = TestCase.class.getResourceAsStream("/tc01NoCompression/vecRow10x32784.mat");
+		assertNotNull(fis);
+		
+		//Create the reader.
+		JMATReader reader = new JMATReader(fis);
+		JMATInfo mdata = reader.getInfo();
+		assertTrue(mdata.dataNumOfItems > 0);
+		assertEquals("vecRow32784", mdata.dataName);
+	}//EndTest.
+	
+	public void testVecRow11x57600() throws IOException {
+		//Open the file.
+		InputStream fis = TestCase.class.getResourceAsStream("/tc01NoCompression/vecRow11x57600.mat");
+		assertNotNull(fis);
+		
+		//Create the reader.
+		JMATReader reader = new JMATReader(fis);
+		JMATInfo mdata = reader.getInfo();
+		assertTrue(mdata.dataNumOfItems > 0);
+		assertEquals("vecRow57600", mdata.dataName);
+	}//EndTest.
+	
+	public void testVecRow12x65568() throws IOException {
+		//Open the file.
+		InputStream fis = TestCase.class.getResourceAsStream("/tc01NoCompression/vecRow12x65568.mat");
+		assertNotNull(fis);
+		
+		//Create the reader.
+		JMATReader reader = new JMATReader(fis);
+		JMATInfo mdata = reader.getInfo();
+		assertTrue(mdata.dataNumOfItems > 0);
+		assertEquals("vecRow65568", mdata.dataName);
+	}//EndTest.
+	
 }//EndTestCase.

@@ -1,8 +1,3 @@
-# JMATRW
-JMATRW is a Java Library to read/write *.MAT files. 
+# JMATRW User Manual
 
-In addition the aim is to support the processing of *.mat files within Apache Spark through the design and develop of an additional library called JMATRW4SPARK. The ongoing development is on the custom InputFormat for Apache Spark.
-
-## License
-
-JMATRW has a LGPLv3 license.
+This are the files of JMATRW User Manual.

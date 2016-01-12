@@ -12,5 +12,6 @@
 		<module>jmatrw</module>
 		
 		<module>jmatrw4spark</module>
+		<module>jmatrw4analytics</module>
 	</modules>
 </project>

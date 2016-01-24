@@ -13,18 +13,46 @@ sealed abstract class ExprValue;
 case class DoubleExprValue(value:Double) extends ExprValue;
 case class BoolExprValue(value:Boolean) extends ExprValue;
 
-class MathFormulaEvaluator {
+class MathExpEvaluator {
    
    var exproot : ExpSymbol = null;
+   var vars : Set[String] = null;
    
+   /**
+    * It takes in input the mathematical expression.
+    */
    def this(sexpression: String) {
      this();
      val parsedExp = MathParser.parseAll(MathParser.exp, sexpression);
      if (parsedExp.successful == false)
        throw new IllegalArgumentException
      exproot = parsedExp.get;
-   }
+     
+     var vars = collection.mutable.Set[String]()
+     this._buildListOfVariables(exproot, vars);
+     this.vars = vars.toSet;
+   }//EndConstructor.
+   
+   def getSetOfVariables() : Set[String] = {
+     return vars;
+   }//EndFunction.
   
+   /**
+    * This method retrieves the variables used with the expression.
+    * It navigates the syntactic tree and extracts all the variable names.
+    */
+   private def _buildListOfVariables(exp : ExpSymbol, varSet : collection.mutable.Set[String]) {
+       exp match {
+         case sym : Const => ;
+         case sym : Var => varSet += sym.name;
+         case sym : ExpOperator => {
+           _buildListOfVariables(sym.x, varSet);
+           _buildListOfVariables(sym.y, varSet);
+         }
+         case _ => throw new IllegalArgumentException;
+       }
+   }//EndFunction.
+   
    def evaluate(varTable : Map[String, Double]) : DTAny = {
      return evaluate(exproot, varTable);  
    }

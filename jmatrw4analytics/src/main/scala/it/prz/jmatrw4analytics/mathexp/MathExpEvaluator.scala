@@ -53,6 +53,11 @@ class MathExpEvaluator {
        }
    }//EndFunction.
    
+   def evaluate(varTable : scala.collection.mutable.Map[String, Double]) : DTAny = {
+     val imap = varTable.toMap;
+     return evaluate(exproot, imap);   
+   }//EndFunction
+    
    def evaluate(varTable : Map[String, Double]) : DTAny = {
      return evaluate(exproot, varTable);  
    }

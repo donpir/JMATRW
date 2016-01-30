@@ -42,8 +42,8 @@ class MathExpTestCase extends TestCase {
      }
    }//EndTest.
     
-   def testFormulaWithConstValues() {
-     val filterFormula : String = "Peak > mean - 4,7 * stddev";
+    def testFormulaWithConstValues() {
+     val filterFormula : String = "Peak > mean - 5 * stddev";
      val variables = Map[String, Double]("Peak" -> 10, "mean" -> 10, "stddev" -> 0);
      
      val expres = new MathExpEvaluator(filterFormula).evaluate(variables);
@@ -52,5 +52,16 @@ class MathExpTestCase extends TestCase {
        case _ => fail();
      }
    }
+    
+   /*def testFormulaWithConstValues() {
+     val filterFormula : String = "Peak > mean - 4,7 * stddev";
+     val variables = Map[String, Double]("Peak" -> 10, "mean" -> 10, "stddev" -> 0);
+     
+     val expres = new MathExpEvaluator(filterFormula).evaluate(variables);
+     expres match {
+       case res : DTBool => assertFalse(res.value)
+       case _ => fail();
+     }
+   }*/
    
 }//EndClass

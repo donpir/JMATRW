@@ -47,5 +47,12 @@ class MathFormulaParserTestCase extends TestCase  {
      assertFalse(MathParser.parseAll(MathParser.exp, "revenue > 100 > 50").successful);
      assertTrue(MathParser.parseAll(MathParser.exp, "revenue < 100").successful);
    }
+   
+   def testMathAndLogicOperators() {
+     assertTrue(MathParser.parseAll(MathParser.exp, "revenue > 5 * stddev").successful);
+     assertTrue(MathParser.parseAll(MathParser.exp, "revenue > stddev * 5").successful);
+     assertTrue(MathParser.parseAll(MathParser.exp, "revenue > 5 * stddev * 5").successful);
+     assertTrue(MathParser.parseAll(MathParser.exp, "revenue > mean - 5 * stddev").successful);
+   }
     
 }//EndClass.

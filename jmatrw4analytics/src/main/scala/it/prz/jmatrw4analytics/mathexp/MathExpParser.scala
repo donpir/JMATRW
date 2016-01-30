@@ -22,7 +22,7 @@ object MathParser extends RegexParsers {
       case op1 ~ "<" ~ op2 => LesserThan(op1, op2)
     }//End.  
     
-    def operand : Parser[ExpSymbol] = term ~ rep( """\+|-""".r ~ factor) ^^ {
+    def operand : Parser[ExpSymbol] = term ~ rep( """\+|-""".r ~ term) ^^ {
       case op ~ list => list.foldLeft(op) {
         case (x, "+" ~ y) => Sum(x, y)
         case (x, "-" ~ y) => Diff(x, y)

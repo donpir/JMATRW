@@ -28,7 +28,7 @@ object ScalaMainRunner {
     hadoopConfig.set("fs.file.impl", classOf[org.apache.hadoop.fs.LocalFileSystem].getName);
     
     //Prapares the formula.
-    val filterFormula : String = "Peak > mean - 4,7 * stddev";
+    val filterFormula : String = "Peak > mean - 5 * stddev";
     val expEvaluator = new MathExpEvaluator(filterFormula);
     val variables = scala.collection.mutable.Map[String, Double]("Peak" -> 100);
 

@@ -1,4 +1,4 @@
-package it.prz.jmatrw4spark.tests.run;
+package it.prz.jmatrw4analytics.spark;
 
 import java.util.Arrays;
 
@@ -10,7 +10,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 
 import it.prz.jmatrw4spark.JMATFileInputFormat;
 
-public class MainRunner {
+public class JavaMainRunner {
 
 	public static void main(String[] args) {
 		SparkConf sparkconf = new SparkConf()
@@ -24,16 +24,12 @@ public class MainRunner {
 		Configuration hadoopConfig = sc.hadoopConfiguration();
 		hadoopConfig.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName()  );
 		hadoopConfig.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName()   );
-		//sc.addJar("e:/installprogram/spark-1.5.2-bin-hadoop2.4/libthirdparty/jmatrw-0.2.jar");
-		//sc.addJar("e:/installprogram/spark-1.5.2-bin-hadoop2.4/libthirdparty/jmatrw4spark-0.2.jar");
 		
-		/*JavaRDD<Double> matrdd2 = sc.parallelize(Arrays.asList(1.0, 3.0, 2.0));
-		System.out.println("Start counting parallelize...");
-		long values = matrdd2.count();
-		System.out.println("Value count of parallelize is " + values);*/
+		String inputFilePath = "e:/tmp/vecRow03_x256.mat";
 		
-		JavaPairRDD<Long, Double> matrdd = sc.newAPIHadoopFile("e:/tmp/vecRow03_x256.mat", JMATFileInputFormat.class, Long.class, Double.class, hadoopConfig);
-		System.out.println("Start job...");
+		JavaPairRDD<Long, Double> matrdd = sc.newAPIHadoopFile(inputFilePath, JMATFileInputFormat.class, Long.class, Double.class, hadoopConfig);
+		System.out.println("Calculating Math Statistics");
+		
 		long values = matrdd.count();
 		System.out.println("Value count of hadoop is " + values);
 		

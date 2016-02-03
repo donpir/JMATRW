@@ -1,5 +1,7 @@
 package it.prz.jmatrw4spark.tests;
 
+import java.net.URL;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.InputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -16,7 +18,10 @@ public class BaseSparkTestCase extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		conf.set("fs.default.name", "file:///");
-		conf.set(FileInputFormat.INPUT_DIR, "D:/data/Progetti/JMatFileIOWorkspace/jmatrw-mvn-parent-project/jmatrw4spark/src/test/resources/basicexamples");
+		URL _baseurl = BaseSparkTestCase.class.getResource("/basicexamples");
+		String basePath = _baseurl.getPath().substring(1);
+		//conf.set(FileInputFormat.INPUT_DIR, "D:/data/Progetti/JMatFileIOWorkspace/jmatrw-mvn-parent-project/jmatrw4spark/src/test/resources/basicexamples");
+		conf.set(FileInputFormat.INPUT_DIR, basePath);
 		
 		inputFormat = ReflectionUtils.newInstance(JMATFileInputFormat.class, conf);
 	}//EndMethod.

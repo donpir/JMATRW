@@ -13,7 +13,8 @@ sealed abstract class ExprValue;
 case class DoubleExprValue(value:Double) extends ExprValue;
 case class BoolExprValue(value:Boolean) extends ExprValue;
 
-class MathExpEvaluator {
+@SerialVersionUID(1L)
+class MathExpEvaluator extends Serializable {
    
    var exproot : ExpSymbol = null;
    var vars : Set[String] = null;

@@ -11,13 +11,16 @@ import org.apache.hadoop.mapreduce.lib.input.{FileInputFormat => NewFileInputFor
 import org.apache.spark.rdd.HadoopRDD
 import it.prz.jmatrw4analytics.mathexp.MathExpEvaluator
 import it.prz.jmatrw4analytics.mathexp.MathExpEvaluator
+import it.prz.jmatrw4analytics.mathexp.model.DTBool
+import sun.swing.FilePane
+import org.apache.hadoop.conf.Configuration
 
 object ScalaMainRunner {
   
   def main(args: Array[String]): Unit = { 
     val sparkconf = new SparkConf();
     sparkconf.setAppName("Simple Application")
-             .setMaster("spark://1.17.99.202:7077")
+             .setMaster("spark://192.168.83.1:7077")
              .set("spark.driver.extraClassPath", "E:/installprogram/spark-1.5.2-bin-hadoop2.4/libthirdparty/*")
 				     .set("spark.executor.extraClassPath", "E:/installprogram/spark-1.5.2-bin-hadoop2.4/libthirdparty/*")
 				     .set("fs.default.name", "file:///");
@@ -27,15 +30,29 @@ object ScalaMainRunner {
     hadoopConfig.set("fs.hdfs.impl", classOf[org.apache.hadoop.hdfs.DistributedFileSystem].getName);
     hadoopConfig.set("fs.file.impl", classOf[org.apache.hadoop.fs.LocalFileSystem].getName);
     
+    val _args = "vecRow128K.mat";
+    var count = 1;
+    while (count > 0) {
+      runtest(_args, sc, hadoopConfig);
+      count = count - 1;
+    }
+  }//EndMethod.
+  
+  def runtest(args: String, sc : SparkContext, hadoopConfig : Configuration) {
+  
+    
     //Prapares the formula.
-    val filterFormula : String = "Peak > mean - 5 * stddev";
+    val filterFormula : String = "Peak > mean + 1 * stddev";
     val expEvaluator = new MathExpEvaluator(filterFormula);
     val variables = scala.collection.mutable.Map[String, Double]("Peak" -> 100);
 
+    //Get the file name from arguments.
+    val filePath = "e:/tmp/" + args; //vecRow12_x65568.mat
+    println("Running file " + filePath);
+    
     val startTime = System.currentTimeMillis();
      
     //Create BaseRDD.
-    val filePath = "e:/tmp/vecRow03_x256.mat";
     val matrdd = sc.newAPIHadoopFile(filePath, classOf[JMATInputFormat[Long, Double]], classOf[Long], classOf[Double], hadoopConfig)
    
     //Run statistics.
@@ -48,13 +65,25 @@ object ScalaMainRunner {
     val numOfValues = matrdd.count();
     
     //Filter the data getting an RDD with filtered values.
-    //matrddvalues.filter(
+    def filterNumber( vars : scala.collection.mutable.Map[String, Double], number : Double ) : Boolean = {
+      vars.put("Peak", number);
+      val result = expEvaluator.evaluate(vars);
+      result match {
+        case result : DTBool => return result.value;
+        case _ => throw new IllegalArgumentException
+      }
+    }
+    
+    val filteredRDD = matrddvalues.filter( x => filterNumber(variables, x) );
+    val numOfValuesFiltered = filteredRDD.count();
     
     val endTime = System.currentTimeMillis();
     val diffTime = endTime - startTime;
     
-    println("Value count of rdd is " + numOfValues);
+    println("Mean: " + stats.mean + " Stddev: " + stats.stdev + " formula:" + (stats.mean + 1 * stats.stdev));
+    println("Num of items in base rdd is " + numOfValues + " The num of filtered items are " + numOfValuesFiltered);
     println(diffTime + " milliseconds");
-  }//EndMethod.
+  }
+  
   
 }//EndObject.

@@ -18,11 +18,12 @@ import org.apache.hadoop.conf.Configuration
 object ScalaMainRunner {
   
   def main(args: Array[String]): Unit = { 
+    val pathLibrary = "D:/Programmi/spark-1.5.2-bin-hadoop2.4/libthirdparty/*";
     val sparkconf = new SparkConf();
     sparkconf.setAppName("Simple Application")
-             .setMaster("spark://192.168.83.1:7077")
-             .set("spark.driver.extraClassPath", "E:/installprogram/spark-1.5.2-bin-hadoop2.4/libthirdparty/*")
-				     .set("spark.executor.extraClassPath", "E:/installprogram/spark-1.5.2-bin-hadoop2.4/libthirdparty/*")
+             .setMaster("spark://172.16.15.34:7077")
+             .set("spark.driver.extraClassPath", pathLibrary)
+				     .set("spark.executor.extraClassPath", pathLibrary)
 				     .set("fs.default.name", "file:///");
     
     val sc = new SparkContext(sparkconf);
@@ -47,7 +48,7 @@ object ScalaMainRunner {
     val variables = scala.collection.mutable.Map[String, Double]("Peak" -> 100);
 
     //Get the file name from arguments.
-    val filePath = "e:/tmp/" + args; //vecRow12_x65568.mat
+    val filePath = "d:/tmp/" + args; //vecRow12_x65568.mat
     println("Running file " + filePath);
     
     val startTime = System.currentTimeMillis();

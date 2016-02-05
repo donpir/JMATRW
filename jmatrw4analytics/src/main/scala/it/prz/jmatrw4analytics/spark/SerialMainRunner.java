@@ -23,7 +23,7 @@ public class SerialMainRunner {
 		
 		scala.collection.mutable.HashMap<String, Object> variables = new scala.collection.mutable.HashMap<String, Object>();
 		
-		String filePath = "e:/tmp/" + "vecRow128M.mat";
+		String filePath = "d:/tmp/" + "vecRow512K.mat";
 		System.out.println("Running file " + filePath);
 		
 		long startTime = System.currentTimeMillis();
